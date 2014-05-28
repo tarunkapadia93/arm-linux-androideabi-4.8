@@ -1,6 +1,7 @@
 This is ld.info, produced by makeinfo version 5.2 from ld.texinfo.
 
-This file documents the GNU linker LD (GNU Binutils) version 2.24.
+This file documents the GNU linker LD
+(UBER-SaberMod-4.8.4_android-graphite) version 2.24.51.
 
    Copyright (C) 1991-2013 Free Software Foundation, Inc.
 
@@ -21,7 +22,8 @@ File: ld.info,  Node: Top,  Next: Overview,  Up: (dir)
 LD
 **
 
-This file documents the GNU linker ld (GNU Binutils) version 2.24.
+This file documents the GNU linker ld
+(UBER-SaberMod-4.8.4_android-graphite) version 2.24.51.
 
    This document is distributed under the terms of the GNU Free
 Documentation License version 1.3.  A copy of the license is included in
@@ -1370,8 +1372,8 @@ GNU linker:
      SECTIONNAME.
 
 '-Ttext-segment=ORG'
-     When creating an ELF executable or shared object, it will set the
-     address of the first byte of the text segment.
+     When creating an ELF executable, it will set the address of the
+     first byte of the text segment.
 
 '-Trodata-segment=ORG'
      When creating an ELF executable or shared object for a target where
@@ -4984,6 +4986,7 @@ not listed.
 * MIPS::			'ld' and the MIPS family
 * MMIX::			'ld' and MMIX
 * MSP430::			'ld' and MSP430
+* NDS32::			'ld' and NDS32
 * PowerPC ELF32::		'ld' and PowerPC 32-bit ELF Support
 * PowerPC64 ELF64::		'ld' and PowerPC64 64-bit ELF Support
 * SPU ELF::			'ld' and SPU ELF Support
@@ -5378,7 +5381,7 @@ section.
 section, are left out from an mmo file.
 
 
-File: ld.info,  Node: MSP430,  Next: PowerPC ELF32,  Prev: MMIX,  Up: Machine Dependent
+File: ld.info,  Node: MSP430,  Next: NDS32,  Prev: MMIX,  Up: Machine Dependent
 
 4.9 'ld' and MSP430
 ===================
@@ -5412,9 +5415,48 @@ specific:
      The last two sections are used by gcc.
 
 
-File: ld.info,  Node: PowerPC ELF32,  Next: PowerPC64 ELF64,  Prev: MSP430,  Up: Machine Dependent
+File: ld.info,  Node: NDS32,  Next: PowerPC ELF32,  Prev: MSP430,  Up: Machine Dependent
 
-4.10 'ld' and PowerPC 32-bit ELF Support
+4.10 'ld' and NDS32
+===================
+
+For NDS32, there are some options to select relaxation behavior.  The
+linker relaxes objects according to these options.
+
+''--m[no-]fp-as-gp''
+     Disable/enable fp-as-gp relaxation.
+
+''--mexport-symbols=FILE''
+     Exporting symbols and their address into FILE as linker script.
+
+''--m[no-]ex9''
+     Disable/enable link-time EX9 relaxation.
+
+''--mexport-ex9=FILE''
+     Export the EX9 table after linking.
+
+''--mimport-ex9=FILE''
+     Import the Ex9 table for EX9 relaxation.
+
+''--mupdate-ex9''
+     Update the existing EX9 table.
+
+''--mex9-limit=NUM''
+     Maximum number of entries in the ex9 table.
+
+''--mex9-loop-aware''
+     Avoid generating the EX9 instruction inside the loop.
+
+''--m[no-]ifc''
+     Disable/enable the link-time IFC optimization.
+
+''--mifc-loop-aware''
+     Avoid generating the IFC instruction inside the loop.
+
+
+File: ld.info,  Node: PowerPC ELF32,  Next: PowerPC64 ELF64,  Prev: NDS32,  Up: Machine Dependent
+
+4.11 'ld' and PowerPC 32-bit ELF Support
 ========================================
 
 Branches on PowerPC processors are limited to a signed 26-bit
@@ -5470,7 +5512,7 @@ considered potentially out of range, and trampolines inserted.
 
 File: ld.info,  Node: PowerPC64 ELF64,  Next: SPU ELF,  Prev: PowerPC ELF32,  Up: Machine Dependent
 
-4.11 'ld' and PowerPC64 64-bit ELF Support
+4.12 'ld' and PowerPC64 64-bit ELF Support
 ==========================================
 
 '--stub-group-size'
@@ -5591,7 +5633,7 @@ File: ld.info,  Node: PowerPC64 ELF64,  Next: SPU ELF,  Prev: PowerPC ELF32,  Up
 
 File: ld.info,  Node: SPU ELF,  Next: TI COFF,  Prev: PowerPC64 ELF64,  Up: Machine Dependent
 
-4.12 'ld' and SPU ELF Support
+4.13 'ld' and SPU ELF Support
 =============================
 
 '--plugin'
@@ -5647,7 +5689,7 @@ File: ld.info,  Node: SPU ELF,  Next: TI COFF,  Prev: PowerPC64 ELF64,  Up: Mach
 
 File: ld.info,  Node: TI COFF,  Next: WIN32,  Prev: SPU ELF,  Up: Machine Dependent
 
-4.13 'ld''s Support for Various TI COFF Versions
+4.14 'ld''s Support for Various TI COFF Versions
 ================================================
 
 The '--format' switch allows selection of one of the various TI COFF
@@ -5659,7 +5701,7 @@ depends on the default specified by the specific target.
 
 File: ld.info,  Node: WIN32,  Next: Xtensa,  Prev: TI COFF,  Up: Machine Dependent
 
-4.14 'ld' and WIN32 (cygwin/mingw)
+4.15 'ld' and WIN32 (cygwin/mingw)
 ==================================
 
 This section describes some of the win32 specific 'ld' issues.  See
@@ -6085,7 +6127,7 @@ _aligned common symbols_
 
 File: ld.info,  Node: Xtensa,  Prev: WIN32,  Up: Machine Dependent
 
-4.15 'ld' and Xtensa Processors
+4.16 'ld' and Xtensa Processors
 ===============================
 
 The default 'ld' behavior for Xtensa processors is to interpret
@@ -7815,6 +7857,7 @@ LD Index
 * relaxing on H8/300:                    H8/300.             (line    9)
 * relaxing on i960:                      i960.               (line   32)
 * relaxing on M68HC11:                   M68HC11/68HC12.     (line   12)
+* relaxing on NDS32:                     NDS32.              (line    6)
 * relaxing on Xtensa:                    Xtensa.             (line   27)
 * relocatable and absolute symbols:      Expression Section. (line    6)
 * relocatable output:                    Options.            (line  483)
@@ -7961,89 +8004,90 @@ LD Index
 
 
 Tag Table:
-Node: Top706
-Node: Overview1487
-Node: Invocation2603
-Node: Options3011
-Node: Environment97112
-Node: Scripts98873
-Node: Basic Script Concepts100607
-Node: Script Format103315
-Node: Simple Example104178
-Node: Simple Commands107272
-Node: Entry Point107777
-Node: File Commands108705
-Node: Format Commands112707
-Node: REGION_ALIAS114663
-Node: Miscellaneous Commands119490
-Node: Assignments123098
-Node: Simple Assignments123609
-Node: HIDDEN125340
-Node: PROVIDE125967
-Node: PROVIDE_HIDDEN127160
-Node: Source Code Reference127404
-Node: SECTIONS130986
-Node: Output Section Description132874
-Node: Output Section Name133977
-Node: Output Section Address134854
-Node: Input Section137087
-Node: Input Section Basics137888
-Node: Input Section Wildcards141787
-Node: Input Section Common146988
-Node: Input Section Keep148470
-Node: Input Section Example148960
-Node: Output Section Data149928
-Node: Output Section Keywords152707
-Node: Output Section Discarding156274
-Node: Output Section Attributes157452
-Node: Output Section Type158552
-Node: Output Section LMA159622
-Node: Forced Output Alignment162693
-Node: Forced Input Alignment163209
-Node: Output Section Constraint163597
-Node: Output Section Region164025
-Node: Output Section Phdr164458
-Node: Output Section Fill165122
-Node: Overlay Description166264
-Node: MEMORY170571
-Node: PHDRS174899
-Node: VERSION180153
-Node: Expressions188244
-Node: Constants189173
-Node: Symbolic Constants190047
-Node: Symbols190598
-Node: Orphan Sections191345
-Node: Location Counter192510
-Node: Operators196944
-Node: Evaluation197866
-Node: Expression Section199230
-Node: Builtin Functions203085
-Node: Implicit Linker Scripts211167
-Node: Machine Dependent211942
-Node: H8/300212980
-Node: i960215043
-Node: M68HC11/68HC12217258
-Node: ARM218703
-Node: HPPA ELF32226683
-Node: M68K228306
-Node: MIPS229215
-Node: MMIX229739
-Node: MSP430230904
-Node: PowerPC ELF32231952
-Node: PowerPC64 ELF64234782
-Node: SPU ELF240936
-Node: TI COFF243570
-Node: WIN32244096
-Node: Xtensa264225
-Node: BFD267191
-Node: BFD outline268649
-Node: BFD information loss269937
-Node: Canonical format272463
-Node: Reporting Bugs276825
-Node: Bug Criteria277519
-Node: Bug Reporting278218
-Node: MRI285256
-Node: GNU Free Documentation License289898
-Node: LD Index315035
+Node: Top733
+Node: Overview1541
+Node: Invocation2657
+Node: Options3065
+Node: Environment97149
+Node: Scripts98910
+Node: Basic Script Concepts100644
+Node: Script Format103352
+Node: Simple Example104215
+Node: Simple Commands107309
+Node: Entry Point107814
+Node: File Commands108742
+Node: Format Commands112744
+Node: REGION_ALIAS114700
+Node: Miscellaneous Commands119527
+Node: Assignments123135
+Node: Simple Assignments123646
+Node: HIDDEN125377
+Node: PROVIDE126004
+Node: PROVIDE_HIDDEN127197
+Node: Source Code Reference127441
+Node: SECTIONS131023
+Node: Output Section Description132911
+Node: Output Section Name134014
+Node: Output Section Address134891
+Node: Input Section137124
+Node: Input Section Basics137925
+Node: Input Section Wildcards141824
+Node: Input Section Common147025
+Node: Input Section Keep148507
+Node: Input Section Example148997
+Node: Output Section Data149965
+Node: Output Section Keywords152744
+Node: Output Section Discarding156311
+Node: Output Section Attributes157489
+Node: Output Section Type158589
+Node: Output Section LMA159659
+Node: Forced Output Alignment162730
+Node: Forced Input Alignment163246
+Node: Output Section Constraint163634
+Node: Output Section Region164062
+Node: Output Section Phdr164495
+Node: Output Section Fill165159
+Node: Overlay Description166301
+Node: MEMORY170608
+Node: PHDRS174936
+Node: VERSION180190
+Node: Expressions188281
+Node: Constants189210
+Node: Symbolic Constants190084
+Node: Symbols190635
+Node: Orphan Sections191382
+Node: Location Counter192547
+Node: Operators196981
+Node: Evaluation197903
+Node: Expression Section199267
+Node: Builtin Functions203122
+Node: Implicit Linker Scripts211204
+Node: Machine Dependent211979
+Node: H8/300213044
+Node: i960215107
+Node: M68HC11/68HC12217322
+Node: ARM218767
+Node: HPPA ELF32226747
+Node: M68K228370
+Node: MIPS229279
+Node: MMIX229803
+Node: MSP430230968
+Node: NDS32232008
+Node: PowerPC ELF32232980
+Node: PowerPC64 ELF64235809
+Node: SPU ELF241963
+Node: TI COFF244597
+Node: WIN32245123
+Node: Xtensa265252
+Node: BFD268218
+Node: BFD outline269676
+Node: BFD information loss270964
+Node: Canonical format273490
+Node: Reporting Bugs277852
+Node: Bug Criteria278546
+Node: Bug Reporting279245
+Node: MRI286283
+Node: GNU Free Documentation License290925
+Node: LD Index316062
 
 End Tag Table

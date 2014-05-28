@@ -78,7 +78,7 @@ extern "C" {
 #define LITSTRCPY(DEST,STR2) memcpy ((DEST), (STR2), sizeof (STR2))
 
 
-#define BFD_SUPPORTS_PLUGINS 1
+#define BFD_SUPPORTS_PLUGINS 0
 
 /* The word size used by BFD on the host.  This may be 64 with a 32
    bit target if the host is 64 bit, or if other 64 bit targets have
@@ -1440,6 +1440,7 @@ typedef struct bfd_section
 #define SEC_INFO_TYPE_MERGE     2
 #define SEC_INFO_TYPE_EH_FRAME  3
 #define SEC_INFO_TYPE_JUST_SYMS 4
+#define SEC_INFO_TYPE_TARGET    5
 
   /* Nonzero if this section uses RELA relocations, rather than REL.  */
   unsigned int use_rela_p:1;

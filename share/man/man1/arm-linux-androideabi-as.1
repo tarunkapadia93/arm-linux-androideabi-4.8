@@ -133,7 +133,7 @@
 .\" ========================================================================
 .\"
 .IX Title "AS 1"
-.TH AS 1 "2014-04-26" "binutils-2.24" "GNU Development Tools"
+.TH AS 1 "2014-05-28" "binutils-2.24.51" "GNU Development Tools"
 .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
 .\" way too many mistakes in technical documents.
 .if n .ad l
@@ -274,10 +274,12 @@ as [\fB\-a\fR[\fBcdghlns\fR][=\fIfile\fR]] [\fB\-\-alternate\fR] [\fB\-D\fR]
    [\fB\-mdmx\fR] [\fB\-no\-mdmx\fR]
    [\fB\-mdsp\fR] [\fB\-mno\-dsp\fR]
    [\fB\-mdspr2\fR] [\fB\-mno\-dspr2\fR]
+   [\fB\-mmsa\fR] [\fB\-mno\-msa\fR]
    [\fB\-mmt\fR] [\fB\-mno\-mt\fR]
    [\fB\-mmcu\fR] [\fB\-mno\-mcu\fR]
    [\fB\-minsn32\fR] [\fB\-mno\-insn32\fR]
    [\fB\-mfix7000\fR] [\fB\-mno\-fix7000\fR]
+   [\fB\-mfix\-rm7000\fR] [\fB\-mno\-fix\-rm7000\fR]
    [\fB\-mfix\-vr4120\fR] [\fB\-mno\-fix\-vr4120\fR]
    [\fB\-mfix\-vr4130\fR] [\fB\-mno\-fix\-vr4130\fR]
    [\fB\-mdebug\fR] [\fB\-no\-mdebug\fR]
@@ -292,6 +294,16 @@ as [\fB\-a\fR[\fBcdghlns\fR][=\fIfile\fR]] [\fB\-\-alternate\fR] [\fB\-D\fR]
 \&\fITarget Nios \s-1II\s0 options:\fR
    [\fB\-relax\-all\fR] [\fB\-relax\-section\fR] [\fB\-no\-relax\fR]
    [\fB\-EB\fR] [\fB\-EL\fR]
+.PP
+\&\fITarget \s-1NDS32\s0 options:\fR
+    [\fB\-EL\fR] [\fB\-EB\fR] [\fB\-O\fR] [\fB\-Os\fR] [\fB\-mcpu=\fR\fIcpu\fR]
+    [\fB\-misa=\fR\fIisa\fR] [\fB\-mabi=\fR\fIabi\fR] [\fB\-mall\-ext\fR]
+    [\fB\-m[no\-]16\-bit\fR]  [\fB\-m[no\-]perf\-ext\fR] [\fB\-m[no\-]perf2\-ext\fR]
+    [\fB\-m[no\-]string\-ext\fR] [\fB\-m[no\-]dsp\-ext\fR] [\fB\-m[no\-]mac\fR] [\fB\-m[no\-]div\fR]
+    [\fB\-m[no\-]audio\-isa\-ext\fR] [\fB\-m[no\-]fpu\-sp\-ext\fR] [\fB\-m[no\-]fpu\-dp\-ext\fR]
+    [\fB\-m[no\-]fpu\-fma\fR] [\fB\-mfpu\-freg=\fR\fI\s-1FREG\s0\fR] [\fB\-mreduced\-regs\fR]
+    [\fB\-mfull\-regs\fR] [\fB\-m[no\-]dx\-regs\fR] [\fB\-mpic\fR] [\fB\-mno\-relax\fR]
+    [\fB\-mb2bb\fR]
 .PP
 \&\fITarget \s-1PDP11\s0 options:\fR
    [\fB\-mpic\fR|\fB\-mno\-pic\fR] [\fB\-mall\fR] [\fB\-mno\-extensions\fR]
@@ -946,6 +958,7 @@ processor names are recognized:
 \&\f(CW\*(C`bdver1\*(C'\fR,
 \&\f(CW\*(C`bdver2\*(C'\fR,
 \&\f(CW\*(C`bdver3\*(C'\fR,
+\&\f(CW\*(C`bdver4\*(C'\fR,
 \&\f(CW\*(C`btver1\*(C'\fR,
 \&\f(CW\*(C`btver2\*(C'\fR,
 \&\f(CW\*(C`generic32\*(C'\fR and
@@ -1234,6 +1247,128 @@ Generate code for Meta 2.1.
 Allow code to use \s-1FPU\s0 hardware of Meta 2.1.
 .PP
 See the info pages for documentation of the MMIX-specific options.
+.PP
+The following options are available when as is configured for a
+\&\s-1NDS32\s0 processor.
+.ie n .IP """\-O1""" 4
+.el .IP "\f(CW\-O1\fR" 4
+.IX Item "-O1"
+Optimize for performance.
+.ie n .IP """\-Os""" 4
+.el .IP "\f(CW\-Os\fR" 4
+.IX Item "-Os"
+Optimize for space.
+.ie n .IP """\-EL""" 4
+.el .IP "\f(CW\-EL\fR" 4
+.IX Item "-EL"
+Produce little endian data output.
+.ie n .IP """\-EB""" 4
+.el .IP "\f(CW\-EB\fR" 4
+.IX Item "-EB"
+Produce little endian data output.
+.ie n .IP """\-mpic""" 4
+.el .IP "\f(CW\-mpic\fR" 4
+.IX Item "-mpic"
+Generate \s-1PIC.\s0
+.ie n .IP """\-mno\-fp\-as\-gp\-relax""" 4
+.el .IP "\f(CW\-mno\-fp\-as\-gp\-relax\fR" 4
+.IX Item "-mno-fp-as-gp-relax"
+Suppress fp-as-gp relaxation for this file.
+.ie n .IP """\-mb2bb\-relax""" 4
+.el .IP "\f(CW\-mb2bb\-relax\fR" 4
+.IX Item "-mb2bb-relax"
+Back-to-back branch optimization.
+.ie n .IP """\-mno\-all\-relax""" 4
+.el .IP "\f(CW\-mno\-all\-relax\fR" 4
+.IX Item "-mno-all-relax"
+Suppress all relaxation for this file.
+.ie n .IP """\-march=<arch name>""" 4
+.el .IP "\f(CW\-march=<arch name>\fR" 4
+.IX Item "-march=<arch name>"
+Assemble for architecture <arch name> which could be v3, v3j, v3m, v3f,
+v3s, v2, v2j, v2f, v2s.
+.ie n .IP """\-mbaseline=<baseline>""" 4
+.el .IP "\f(CW\-mbaseline=<baseline>\fR" 4
+.IX Item "-mbaseline=<baseline>"
+Assemble for baseline <baseline> which could be v2, v3, v3m.
+.ie n .IP """\-mfpu\-freg=\f(CIFREG\f(CW""" 4
+.el .IP "\f(CW\-mfpu\-freg=\f(CIFREG\f(CW\fR" 4
+.IX Item "-mfpu-freg=FREG"
+Specify a \s-1FPU\s0 configuration.
+.RS 4
+.ie n .IP """0      8 SP /  4 DP registers""" 4
+.el .IP "\f(CW0      8 SP /  4 DP registers\fR" 4
+.IX Item "0 8 SP / 4 DP registers"
+.PD 0
+.ie n .IP """1     16 SP /  8 DP registers""" 4
+.el .IP "\f(CW1     16 SP /  8 DP registers\fR" 4
+.IX Item "1 16 SP / 8 DP registers"
+.ie n .IP """2     32 SP / 16 DP registers""" 4
+.el .IP "\f(CW2     32 SP / 16 DP registers\fR" 4
+.IX Item "2 32 SP / 16 DP registers"
+.ie n .IP """3     32 SP / 32 DP registers""" 4
+.el .IP "\f(CW3     32 SP / 32 DP registers\fR" 4
+.IX Item "3 32 SP / 32 DP registers"
+.RE
+.RS 4
+.RE
+.ie n .IP """\-mabi=\f(CIabi\f(CW""" 4
+.el .IP "\f(CW\-mabi=\f(CIabi\f(CW\fR" 4
+.IX Item "-mabi=abi"
+.PD
+Specify a abi version <abi> could be v1, v2, v2fp, v2fpp.
+.ie n .IP """\-m[no\-]mac""" 4
+.el .IP "\f(CW\-m[no\-]mac\fR" 4
+.IX Item "-m[no-]mac"
+Enable/Disable Multiply instructions support.
+.ie n .IP """\-m[no\-]div""" 4
+.el .IP "\f(CW\-m[no\-]div\fR" 4
+.IX Item "-m[no-]div"
+Enable/Disable Divide instructions support.
+.ie n .IP """\-m[no\-]16bit\-ext""" 4
+.el .IP "\f(CW\-m[no\-]16bit\-ext\fR" 4
+.IX Item "-m[no-]16bit-ext"
+Enable/Disable 16\-bit extension
+.ie n .IP """\-m[no\-]dx\-regs""" 4
+.el .IP "\f(CW\-m[no\-]dx\-regs\fR" 4
+.IX Item "-m[no-]dx-regs"
+Enable/Disable d0/d1 registers
+.ie n .IP """\-m[no\-]perf\-ext""" 4
+.el .IP "\f(CW\-m[no\-]perf\-ext\fR" 4
+.IX Item "-m[no-]perf-ext"
+Enable/Disable Performance extension
+.ie n .IP """\-m[no\-]perf2\-ext""" 4
+.el .IP "\f(CW\-m[no\-]perf2\-ext\fR" 4
+.IX Item "-m[no-]perf2-ext"
+Enable/Disable Performance extension 2
+.ie n .IP """\-m[no\-]string\-ext""" 4
+.el .IP "\f(CW\-m[no\-]string\-ext\fR" 4
+.IX Item "-m[no-]string-ext"
+Enable/Disable String extension
+.ie n .IP """\-m[no\-]reduced\-regs""" 4
+.el .IP "\f(CW\-m[no\-]reduced\-regs\fR" 4
+.IX Item "-m[no-]reduced-regs"
+Enable/Disable Reduced Register configuration (\s-1GPR16\s0) option
+.ie n .IP """\-m[no\-]audio\-isa\-ext""" 4
+.el .IP "\f(CW\-m[no\-]audio\-isa\-ext\fR" 4
+.IX Item "-m[no-]audio-isa-ext"
+Enable/Disable \s-1AUDIO ISA\s0 extension
+.ie n .IP """\-m[no\-]fpu\-sp\-ext""" 4
+.el .IP "\f(CW\-m[no\-]fpu\-sp\-ext\fR" 4
+.IX Item "-m[no-]fpu-sp-ext"
+Enable/Disable \s-1FPU SP\s0 extension
+.ie n .IP """\-m[no\-]fpu\-dp\-ext""" 4
+.el .IP "\f(CW\-m[no\-]fpu\-dp\-ext\fR" 4
+.IX Item "-m[no-]fpu-dp-ext"
+Enable/Disable \s-1FPU DP\s0 extension
+.ie n .IP """\-m[no\-]fpu\-fma""" 4
+.el .IP "\f(CW\-m[no\-]fpu\-fma\fR" 4
+.IX Item "-m[no-]fpu-fma"
+Enable/Disable \s-1FPU\s0 fused-multiply-add instructions
+.ie n .IP """\-mall\-ext""" 4
+.el .IP "\f(CW\-mall\-ext\fR" 4
+.IX Item "-mall-ext"
+Turn on all extensions and instructions support
 .PP
 The following options are available when as is configured for a
 PowerPC processor.

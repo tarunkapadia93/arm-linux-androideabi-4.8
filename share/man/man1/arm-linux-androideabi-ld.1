@@ -133,7 +133,7 @@
 .\" ========================================================================
 .\"
 .IX Title "LD 1"
-.TH LD 1 "2014-04-26" "binutils-2.24" "GNU Development Tools"
+.TH LD 1 "2014-05-28" "binutils-2.24.51" "GNU Development Tools"
 .\" For nroff, turn off justification.  Always turn off hyphenation; it makes
 .\" way too many mistakes in technical documents.
 .if n .ad l
@@ -1636,8 +1636,8 @@ Same as \fB\-\-section\-start\fR, with \f(CW\*(C`.bss\*(C'\fR, \f(CW\*(C`.data\*
 \&\f(CW\*(C`.text\*(C'\fR as the \fIsectionname\fR.
 .IP "\fB\-Ttext\-segment=\fR\fIorg\fR" 4
 .IX Item "-Ttext-segment=org"
-When creating an \s-1ELF\s0 executable or shared object, it will set the address
-of the first byte of the text segment.
+When creating an \s-1ELF\s0 executable, it will set the address of the first
+byte of the text segment.
 .IP "\fB\-Trodata\-segment=\fR\fIorg\fR" 4
 .IX Item "-Trodata-segment=org"
 When creating an \s-1ELF\s0 executable or shared object for a target where
