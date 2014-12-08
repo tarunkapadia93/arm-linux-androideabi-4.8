@@ -19755,6 +19755,22 @@ _PowerPC and IBM RS6000--'config/rs6000/constraints.md'_
      'wg'
           If '-mmfpgpr' was used, a floating point register or NO_REGS.
 
+     'wh'
+          Floating point register if direct moves are available, or
+          NO_REGS.
+
+     'wi'
+          FP or VSX register to hold 64-bit integers for VSX insns or
+          NO_REGS.
+
+     'wj'
+          FP or VSX register to hold 64-bit integers for direct moves or
+          NO_REGS.
+
+     'wk'
+          FP or VSX register to hold 64-bit doubles for direct moves or
+          NO_REGS.
+
      'wl'
           Floating point register if the LFIWAX instruction is enabled
           or NO_REGS.
@@ -19792,7 +19808,7 @@ _PowerPC and IBM RS6000--'config/rs6000/constraints.md'_
           or NO_REGS.
 
      'wy'
-          VSX vector register to hold scalar float values or NO_REGS.
+          FP or VSX register to perform ISA 2.07 float ops or NO_REGS.
 
      'wz'
           Floating point register if the LFIWZX instruction is enabled
@@ -30656,11 +30672,6 @@ the stack.
      compiler will run out of spill registers and print a fatal error
      message.
 
- -- Target Hook: unsigned int TARGET_FLAGS_REGNUM
-     If the target has a dedicated flags register, and it needs to use
-     the post-reload comparison elimination pass, then this value should
-     be set appropriately.
-
 
 File: gccint.info,  Node: Scalar Return,  Next: Aggregate Return,  Prev: Register Arguments,  Up: Stack and Calling
 
@@ -32094,7 +32105,6 @@ interested in most macros in this section.
 
 * CC0 Condition Codes::      Old style representation of condition codes.
 * MODE_CC Condition Codes::  Modern representation of condition codes.
-* Cond Exec Macros::         Macros to control conditional execution.
 
 
 File: gccint.info,  Node: CC0 Condition Codes,  Next: MODE_CC Condition Codes,  Up: Condition Code
@@ -32162,7 +32172,7 @@ machine-specific information by defining 'CC_STATUS_MDEP'.
      patterns in two places, the 'md' file and in 'NOTICE_UPDATE_CC'.
 
 
-File: gccint.info,  Node: MODE_CC Condition Codes,  Next: Cond Exec Macros,  Prev: CC0 Condition Codes,  Up: Condition Code
+File: gccint.info,  Node: MODE_CC Condition Codes,  Prev: CC0 Condition Codes,  Up: Condition Code
 
 17.16.2 Representation of condition codes using registers
 ---------------------------------------------------------
@@ -32202,10 +32212,11 @@ File: gccint.info,  Node: MODE_CC Condition Codes,  Next: Cond Exec Macros,  Pre
      comparisons whose argument is a 'plus':
 
           #define SELECT_CC_MODE(OP,X,Y) \
-            (GET_MODE_CLASS (GET_MODE (X)) == MODE_FLOAT          \
-             ? ((OP == EQ || OP == NE) ? CCFPmode : CCFPEmode)    \
-             : ((GET_CODE (X) == PLUS || GET_CODE (X) == MINUS    \
-                 || GET_CODE (X) == NEG) \
+            (GET_MODE_CLASS (GET_MODE (X)) == MODE_FLOAT           \
+             ? ((OP == LT || OP == LE || OP == GT || OP == GE)     \
+                ? CCFPEmode : CCFPmode)                            \
+             : ((GET_CODE (X) == PLUS || GET_CODE (X) == MINUS     \
+                 || GET_CODE (X) == NEG || GET_CODE (x) == ASHIFT) \
                 ? CC_NOOVmode : CCmode))
 
      Another reason to use modes is to retain information on which
@@ -32247,10 +32258,11 @@ File: gccint.info,  Node: MODE_CC Condition Codes,  Next: Cond Exec Macros,  Pre
      You need not define this macro if it would always returns zero or
      if the floating-point format is anything other than
      'IEEE_FLOAT_FORMAT'.  For example, here is the definition used on
-     the SPARC, where floating-point inequality comparisons are always
-     given 'CCFPEmode':
+     the SPARC, where floating-point inequality comparisons are given
+     either 'CCFPEmode' or 'CCFPmode':
 
-          #define REVERSIBLE_CC_MODE(MODE)  ((MODE) != CCFPEmode)
+          #define REVERSIBLE_CC_MODE(MODE) \
+             ((MODE) != CCFPEmode && (MODE) != CCFPmode)
 
  -- Macro: REVERSE_CONDITION (CODE, MODE)
      A C expression whose value is reversed condition code of the CODE
@@ -32259,7 +32271,7 @@ File: gccint.info,  Node: MODE_CC Condition Codes,  Next: Cond Exec Macros,  Pre
      case machine has some non-standard way how to reverse certain
      conditionals.  For instance in case all floating point conditions
      are non-trapping, compiler may freely convert unordered compares to
-     ordered one.  Then definition may look like:
+     ordered ones.  Then definition may look like:
 
           #define REVERSE_CONDITION(CODE, MODE) \
              ((MODE) != CCFPmode ? reverse_condition (CODE) \
@@ -32293,15 +32305,10 @@ File: gccint.info,  Node: MODE_CC Condition Codes,  Next: Cond Exec Macros,  Pre
      same.  If they are, it returns that mode.  If they are different,
      it returns 'VOIDmode'.
 
-
-File: gccint.info,  Node: Cond Exec Macros,  Prev: MODE_CC Condition Codes,  Up: Condition Code
-
-17.16.3 Macros to control conditional execution
------------------------------------------------
-
-There is one macro that may need to be defined for targets supporting
-conditional execution, independent of how they represent conditional
-branches.
+ -- Target Hook: unsigned int TARGET_FLAGS_REGNUM
+     If the target has a dedicated flags register, and it needs to use
+     the post-reload comparison elimination pass, then this value should
+     be set appropriately.
 
 
 File: gccint.info,  Node: Costs,  Next: Scheduling,  Prev: Condition Code,  Up: Target Macros
@@ -45741,7 +45748,6 @@ Concept Index
 * condition codes:                       Comparisons.        (line   20)
 * conditional execution:                 Conditional Execution.
                                                              (line    6)
-* conditional execution <1>:             Cond Exec Macros.   (line    6)
 * Conditional Expressions:               Conditional Expressions.
                                                              (line    6)
 * conditions, in patterns:               Patterns.           (line   43)
@@ -47674,7 +47680,6 @@ Concept Index
 * predicates and machine modes:          Predicates.         (line   31)
 * predication:                           Conditional Execution.
                                                              (line    6)
-* predication <1>:                       Cond Exec Macros.   (line    6)
 * predict.def:                           Profile information.
                                                              (line   24)
 * PREFERRED_DEBUGGING_TYPE:              All Debuggers.      (line   41)
@@ -47919,9 +47924,9 @@ Concept Index
 * reverse probability:                   Profile information.
                                                              (line   66)
 * REVERSE_CONDITION:                     MODE_CC Condition Codes.
-                                                             (line   91)
+                                                             (line   93)
 * REVERSIBLE_CC_MODE:                    MODE_CC Condition Codes.
-                                                             (line   77)
+                                                             (line   78)
 * right rotate:                          Arithmetic.         (line  196)
 * right shift:                           Arithmetic.         (line  191)
 * 'rintM2' instruction pattern:          Standard Names.     (line  662)
@@ -48400,14 +48405,14 @@ Concept Index
 * TARGET_CANNOT_FORCE_CONST_MEM:         Addressing Modes.   (line  234)
 * TARGET_CANNOT_MODIFY_JUMPS_P:          Misc.               (line  778)
 * TARGET_CANONICALIZE_COMPARISON:        MODE_CC Condition Codes.
-                                                             (line   54)
+                                                             (line   55)
 * TARGET_CANONICAL_VA_LIST_TYPE:         Register Arguments. (line  292)
 * TARGET_CAN_ELIMINATE:                  Elimination.        (line   73)
 * TARGET_CAN_FOLLOW_JUMP:                Misc.               (line  687)
 * TARGET_CAN_INLINE_P:                   Target Attributes.  (line  157)
 * TARGET_CASE_VALUES_THRESHOLD:          Misc.               (line   46)
 * TARGET_CC_MODES_COMPATIBLE:            MODE_CC Condition Codes.
-                                                             (line  119)
+                                                             (line  121)
 * TARGET_CHECK_PCH_TARGET_FLAGS:         PCH Target.         (line   26)
 * TARGET_CHECK_STRING_OBJECT_FORMAT_ARG: Run-time Target.    (line  119)
 * TARGET_CLASS_LIKELY_SPILLED_P:         Register Classes.   (line  489)
@@ -48479,10 +48484,11 @@ Concept Index
 * TARGET_EXTRA_LIVE_ON_ENTRY:            Tail Calls.         (line   20)
 * TARGET_EXTRA_PRE_INCLUDES:             Misc.               (line  844)
 * TARGET_FIXED_CONDITION_CODE_REGS:      MODE_CC Condition Codes.
-                                                             (line  104)
+                                                             (line  106)
 * TARGET_FIXED_POINT_SUPPORTED_P:        Storage Layout.     (line  521)
 * target_flags:                          Run-time Target.    (line   51)
-* TARGET_FLAGS_REGNUM:                   Register Arguments. (line  391)
+* TARGET_FLAGS_REGNUM:                   MODE_CC Condition Codes.
+                                                             (line  134)
 * TARGET_FLT_EVAL_METHOD:                Type Layout.        (line  147)
 * TARGET_FN_ABI_VA_LIST:                 Register Arguments. (line  287)
 * TARGET_FOLD_BUILTIN:                   Misc.               (line  627)
@@ -49408,163 +49414,162 @@ Node: Multi-Alternative846551
 Node: Class Preferences849392
 Node: Modifiers850284
 Node: Machine Constraints854530
-Node: Disable Insn Alternatives906396
-Node: Define Constraints909300
-Node: C Constraint Interface916085
-Node: Standard Names919737
-Ref: shift patterns942281
-Ref: prologue instruction pattern987184
-Ref: window_save instruction pattern987677
-Ref: epilogue instruction pattern987954
-Node: Pattern Ordering1005540
-Node: Dependent Patterns1006776
-Node: Jump Patterns1008396
-Ref: Jump Patterns-Footnote-11010543
-Node: Looping Patterns1010591
-Node: Insn Canonicalizations1015320
-Node: Expander Definitions1019905
-Node: Insn Splitting1028119
-Node: Including Patterns1037722
-Node: Peephole Definitions1039506
-Node: define_peephole1040759
-Node: define_peephole21047089
-Node: Insn Attributes1050156
-Node: Defining Attributes1051262
-Ref: define_enum_attr1054477
-Node: Expressions1055513
-Node: Tagging Insns1062263
-Node: Attr Example1066616
-Node: Insn Lengths1068989
-Node: Constant Attributes1072048
-Node: Delay Slots1073217
-Node: Processor pipeline description1076441
-Ref: Processor pipeline description-Footnote-11095259
-Node: Conditional Execution1095583
-Node: Define Subst1098646
-Node: Define Subst Example1100682
-Node: Define Subst Pattern Matching1103676
-Node: Define Subst Output Template1104902
-Node: Constant Definitions1106972
-Ref: define_enum1110754
-Node: Iterators1111242
-Node: Mode Iterators1111820
-Node: Defining Mode Iterators1112798
-Node: Substitutions1114292
-Node: Examples1116534
-Node: Code Iterators1117982
-Node: Int Iterators1120261
-Node: Subst Iterators1122722
-Node: Target Macros1124414
-Node: Target Structure1127502
-Node: Driver1129618
-Node: Run-time Target1148403
-Node: Per-Function Data1157568
-Node: Storage Layout1160332
-Node: Type Layout1186387
-Node: Registers1201710
-Node: Register Basics1202684
-Node: Allocation Order1208192
-Node: Values in Registers1210638
-Node: Leaf Functions1218116
-Node: Stack Registers1220975
-Node: Register Classes1222247
-Node: Old Constraints1252214
-Node: Stack and Calling1259354
-Node: Frame Layout1259888
-Node: Exception Handling1270764
-Node: Stack Checking1276976
-Node: Frame Registers1281790
-Node: Elimination1290049
-Node: Stack Arguments1294279
-Node: Register Arguments1301463
-Node: Scalar Return1321766
-Node: Aggregate Return1327853
-Node: Caller Saves1332064
-Node: Function Entry1333241
-Node: Profiling1344335
-Node: Tail Calls1346034
-Node: Stack Smashing Protection1347937
-Node: Varargs1349565
-Node: Trampolines1356252
-Node: Library Calls1362295
-Node: Addressing Modes1367234
-Node: Anchored Addresses1387249
-Node: Condition Code1389892
-Node: CC0 Condition Codes1392021
-Node: MODE_CC Condition Codes1395267
-Node: Cond Exec Macros1401791
-Node: Costs1402137
-Node: Scheduling1418599
-Node: Sections1438016
-Node: PIC1453714
-Node: Assembler Format1455773
-Node: File Framework1456911
-Ref: TARGET_HAVE_SWITCHABLE_BSS_SECTIONS1463843
-Node: Data Output1467113
-Node: Uninitialized Data1474882
-Node: Label Output1479893
-Node: Initialization1502849
-Node: Macros for Initialization1508810
-Node: Instruction Output1515529
-Node: Dispatch Tables1526024
-Node: Exception Region Output1530402
-Node: Alignment Output1537080
-Node: Debugging Info1541626
-Node: All Debuggers1542296
-Node: DBX Options1545151
-Node: DBX Hooks1550589
-Node: File Names and DBX1551898
-Node: SDB and DWARF1554010
-Node: VMS Debug1560082
-Node: Floating Point1560669
-Node: Mode Switching1565145
-Node: Target Attributes1569141
-Node: Emulated TLS1577455
-Node: MIPS Coprocessors1580845
-Node: PCH Target1582142
-Node: C++ ABI1583984
-Node: Named Address Spaces1588778
-Node: Misc1593712
-Ref: TARGET_SHIFT_TRUNCATION_MASK1600454
-Node: Host Config1645610
-Node: Host Common1646678
-Node: Filesystem1649052
-Node: Host Misc1653167
-Node: Fragments1655616
-Node: Target Fragment1656811
-Node: Host Fragment1667439
-Node: Collect21667679
-Node: Header Dirs1670315
-Node: Type Information1671738
-Node: GTY Options1674957
-Node: User GC1689291
-Node: GGC Roots1693022
-Node: Files1693735
-Node: Invoking the garbage collector1696442
-Node: Troubleshooting1697947
-Node: Plugins1699022
-Node: Plugins loading1700140
-Node: Plugin API1701010
-Node: Plugins pass1708038
-Node: Plugins GC1710009
-Node: Plugins description1711674
-Node: Plugins attr1712210
-Node: Plugins recording1714097
-Node: Plugins gate1714947
-Node: Plugins tracking1715538
-Node: Plugins building1716126
-Node: LTO1717913
-Node: LTO Overview1718774
-Node: LTO object file layout1724606
-Node: IPA1729236
-Node: WHOPR1738201
-Node: Internal flags1742890
-Node: Funding1744102
-Node: GNU Project1746586
-Node: Copying1747235
-Node: GNU Free Documentation License1784747
-Node: Contributors1809868
-Node: Option Index1847269
-Node: Concept Index1848073
+Node: Disable Insn Alternatives906800
+Node: Define Constraints909704
+Node: C Constraint Interface916489
+Node: Standard Names920141
+Ref: shift patterns942685
+Ref: prologue instruction pattern987588
+Ref: window_save instruction pattern988081
+Ref: epilogue instruction pattern988358
+Node: Pattern Ordering1005944
+Node: Dependent Patterns1007180
+Node: Jump Patterns1008800
+Ref: Jump Patterns-Footnote-11010947
+Node: Looping Patterns1010995
+Node: Insn Canonicalizations1015724
+Node: Expander Definitions1020309
+Node: Insn Splitting1028523
+Node: Including Patterns1038126
+Node: Peephole Definitions1039910
+Node: define_peephole1041163
+Node: define_peephole21047493
+Node: Insn Attributes1050560
+Node: Defining Attributes1051666
+Ref: define_enum_attr1054881
+Node: Expressions1055917
+Node: Tagging Insns1062667
+Node: Attr Example1067020
+Node: Insn Lengths1069393
+Node: Constant Attributes1072452
+Node: Delay Slots1073621
+Node: Processor pipeline description1076845
+Ref: Processor pipeline description-Footnote-11095663
+Node: Conditional Execution1095987
+Node: Define Subst1099050
+Node: Define Subst Example1101086
+Node: Define Subst Pattern Matching1104080
+Node: Define Subst Output Template1105306
+Node: Constant Definitions1107376
+Ref: define_enum1111158
+Node: Iterators1111646
+Node: Mode Iterators1112224
+Node: Defining Mode Iterators1113202
+Node: Substitutions1114696
+Node: Examples1116938
+Node: Code Iterators1118386
+Node: Int Iterators1120665
+Node: Subst Iterators1123126
+Node: Target Macros1124818
+Node: Target Structure1127906
+Node: Driver1130022
+Node: Run-time Target1148807
+Node: Per-Function Data1157972
+Node: Storage Layout1160736
+Node: Type Layout1186791
+Node: Registers1202114
+Node: Register Basics1203088
+Node: Allocation Order1208596
+Node: Values in Registers1211042
+Node: Leaf Functions1218520
+Node: Stack Registers1221379
+Node: Register Classes1222651
+Node: Old Constraints1252618
+Node: Stack and Calling1259758
+Node: Frame Layout1260292
+Node: Exception Handling1271168
+Node: Stack Checking1277380
+Node: Frame Registers1282194
+Node: Elimination1290453
+Node: Stack Arguments1294683
+Node: Register Arguments1301867
+Node: Scalar Return1321948
+Node: Aggregate Return1328035
+Node: Caller Saves1332246
+Node: Function Entry1333423
+Node: Profiling1344517
+Node: Tail Calls1346216
+Node: Stack Smashing Protection1348119
+Node: Varargs1349747
+Node: Trampolines1356434
+Node: Library Calls1362477
+Node: Addressing Modes1367416
+Node: Anchored Addresses1387431
+Node: Condition Code1390074
+Node: CC0 Condition Codes1392133
+Node: MODE_CC Condition Codes1395379
+Node: Costs1402249
+Node: Scheduling1418711
+Node: Sections1438128
+Node: PIC1453826
+Node: Assembler Format1455885
+Node: File Framework1457023
+Ref: TARGET_HAVE_SWITCHABLE_BSS_SECTIONS1463955
+Node: Data Output1467225
+Node: Uninitialized Data1474994
+Node: Label Output1480005
+Node: Initialization1502961
+Node: Macros for Initialization1508922
+Node: Instruction Output1515641
+Node: Dispatch Tables1526136
+Node: Exception Region Output1530514
+Node: Alignment Output1537192
+Node: Debugging Info1541738
+Node: All Debuggers1542408
+Node: DBX Options1545263
+Node: DBX Hooks1550701
+Node: File Names and DBX1552010
+Node: SDB and DWARF1554122
+Node: VMS Debug1560194
+Node: Floating Point1560781
+Node: Mode Switching1565257
+Node: Target Attributes1569253
+Node: Emulated TLS1577567
+Node: MIPS Coprocessors1580957
+Node: PCH Target1582254
+Node: C++ ABI1584096
+Node: Named Address Spaces1588890
+Node: Misc1593824
+Ref: TARGET_SHIFT_TRUNCATION_MASK1600566
+Node: Host Config1645722
+Node: Host Common1646790
+Node: Filesystem1649164
+Node: Host Misc1653279
+Node: Fragments1655728
+Node: Target Fragment1656923
+Node: Host Fragment1667551
+Node: Collect21667791
+Node: Header Dirs1670427
+Node: Type Information1671850
+Node: GTY Options1675069
+Node: User GC1689403
+Node: GGC Roots1693134
+Node: Files1693847
+Node: Invoking the garbage collector1696554
+Node: Troubleshooting1698059
+Node: Plugins1699134
+Node: Plugins loading1700252
+Node: Plugin API1701122
+Node: Plugins pass1708150
+Node: Plugins GC1710121
+Node: Plugins description1711786
+Node: Plugins attr1712322
+Node: Plugins recording1714209
+Node: Plugins gate1715059
+Node: Plugins tracking1715650
+Node: Plugins building1716238
+Node: LTO1718025
+Node: LTO Overview1718886
+Node: LTO object file layout1724718
+Node: IPA1729348
+Node: WHOPR1738313
+Node: Internal flags1743002
+Node: Funding1744214
+Node: GNU Project1746698
+Node: Copying1747347
+Node: GNU Free Documentation License1784859
+Node: Contributors1809980
+Node: Option Index1847381
+Node: Concept Index1848185
 
 End Tag Table
