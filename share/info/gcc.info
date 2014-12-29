@@ -56,7 +56,7 @@ Introduction
 
 This manual documents how to use the GNU compilers, as well as their
 features and incompatibilities, and how to report bugs.  It corresponds
-to the compilers (SaberMod-4.8.4_android-graphite) version 4.8.4.  The
+to the compilers (SaberMod-4.8.5_android-graphite) version 4.8.5.  The
 internals of the GNU compilers, including how to port them to new
 targets and some information about how to write front ends for new
 languages, are documented in a separate manual.  *Note Introduction:
@@ -39143,16 +39143,22 @@ values within the range required for that operation.
      vector bool int vec_cmplt (vector signed int, vector signed int);
      vector bool int vec_cmplt (vector float, vector float);
 
+     vector float vec_cpsgn (vector float, vector float);
+
      vector float vec_ctf (vector unsigned int, const int);
      vector float vec_ctf (vector signed int, const int);
+     vector double vec_ctf (vector unsigned long, const int);
+     vector double vec_ctf (vector signed long, const int);
 
      vector float vec_vcfsx (vector signed int, const int);
 
      vector float vec_vcfux (vector unsigned int, const int);
 
      vector signed int vec_cts (vector float, const int);
+     vector signed long vec_cts (vector double, const int);
 
      vector unsigned int vec_ctu (vector float, const int);
+     vector unsigned long vec_ctu (vector double, const int);
 
      void vec_dss (const int);
 
@@ -39988,6 +39994,16 @@ values within the range required for that operation.
      vector signed int vec_splat (vector signed int, const int);
      vector unsigned int vec_splat (vector unsigned int, const int);
      vector bool int vec_splat (vector bool int, const int);
+     vector signed long vec_splat (vector signed long, const int);
+     vector unsigned long vec_splat (vector unsigned long, const int);
+
+     vector signed char vec_splats (signed char);
+     vector unsigned char vec_splats (unsigned char);
+     vector signed short vec_splats (signed short);
+     vector unsigned short vec_splats (unsigned short);
+     vector signed int vec_splats (signed int);
+     vector unsigned int vec_splats (unsigned int);
+     vector float vec_splats (float);
 
      vector float vec_vspltw (vector float, const int);
      vector signed int vec_vspltw (vector signed int, const int);
@@ -40690,17 +40706,32 @@ additional functions are available:
      vector double vec_and (vector double, vector double);
      vector double vec_and (vector double, vector bool long);
      vector double vec_and (vector bool long, vector double);
+     vector long vec_and (vector long, vector long);
+     vector long vec_and (vector long, vector bool long);
+     vector long vec_and (vector bool long, vector long);
+     vector unsigned long vec_and (vector unsigned long, vector unsigned long);
+     vector unsigned long vec_and (vector unsigned long, vector bool long);
+     vector unsigned long vec_and (vector bool long, vector unsigned long);
      vector double vec_andc (vector double, vector double);
      vector double vec_andc (vector double, vector bool long);
      vector double vec_andc (vector bool long, vector double);
+     vector long vec_andc (vector long, vector long);
+     vector long vec_andc (vector long, vector bool long);
+     vector long vec_andc (vector bool long, vector long);
+     vector unsigned long vec_andc (vector unsigned long, vector unsigned long);
+     vector unsigned long vec_andc (vector unsigned long, vector bool long);
+     vector unsigned long vec_andc (vector bool long, vector unsigned long);
      vector double vec_ceil (vector double);
      vector bool long vec_cmpeq (vector double, vector double);
      vector bool long vec_cmpge (vector double, vector double);
      vector bool long vec_cmpgt (vector double, vector double);
      vector bool long vec_cmple (vector double, vector double);
      vector bool long vec_cmplt (vector double, vector double);
+     vector double vec_cpsgn (vector double, vector double);
      vector float vec_div (vector float, vector float);
      vector double vec_div (vector double, vector double);
+     vector long vec_div (vector long, vector long);
+     vector unsigned long vec_div (vector unsigned long, vector unsigned long);
      vector double vec_floor (vector double);
      vector double vec_ld (int, const vector double *);
      vector double vec_ld (int, const double *);
@@ -40710,38 +40741,83 @@ additional functions are available:
      vector unsigned char vec_lvsr (int, const volatile double *);
      vector double vec_madd (vector double, vector double, vector double);
      vector double vec_max (vector double, vector double);
+     vector signed long vec_mergeh (vector signed long, vector signed long);
+     vector signed long vec_mergeh (vector signed long, vector bool long);
+     vector signed long vec_mergeh (vector bool long, vector signed long);
+     vector unsigned long vec_mergeh (vector unsigned long, vector unsigned long);
+     vector unsigned long vec_mergeh (vector unsigned long, vector bool long);
+     vector unsigned long vec_mergeh (vector bool long, vector unsigned long);
+     vector signed long vec_mergel (vector signed long, vector signed long);
+     vector signed long vec_mergel (vector signed long, vector bool long);
+     vector signed long vec_mergel (vector bool long, vector signed long);
+     vector unsigned long vec_mergel (vector unsigned long, vector unsigned long);
+     vector unsigned long vec_mergel (vector unsigned long, vector bool long);
+     vector unsigned long vec_mergel (vector bool long, vector unsigned long);
      vector double vec_min (vector double, vector double);
      vector float vec_msub (vector float, vector float, vector float);
      vector double vec_msub (vector double, vector double, vector double);
      vector float vec_mul (vector float, vector float);
      vector double vec_mul (vector double, vector double);
+     vector long vec_mul (vector long, vector long);
+     vector unsigned long vec_mul (vector unsigned long, vector unsigned long);
      vector float vec_nearbyint (vector float);
      vector double vec_nearbyint (vector double);
      vector float vec_nmadd (vector float, vector float, vector float);
      vector double vec_nmadd (vector double, vector double, vector double);
      vector double vec_nmsub (vector double, vector double, vector double);
      vector double vec_nor (vector double, vector double);
+     vector long vec_nor (vector long, vector long);
+     vector long vec_nor (vector long, vector bool long);
+     vector long vec_nor (vector bool long, vector long);
+     vector unsigned long vec_nor (vector unsigned long, vector unsigned long);
+     vector unsigned long vec_nor (vector unsigned long, vector bool long);
+     vector unsigned long vec_nor (vector bool long, vector unsigned long);
      vector double vec_or (vector double, vector double);
      vector double vec_or (vector double, vector bool long);
      vector double vec_or (vector bool long, vector double);
-     vector double vec_perm (vector double,
-                             vector double,
-                             vector unsigned char);
+     vector long vec_or (vector long, vector long);
+     vector long vec_or (vector long, vector bool long);
+     vector long vec_or (vector bool long, vector long);
+     vector unsigned long vec_or (vector unsigned long, vector unsigned long);
+     vector unsigned long vec_or (vector unsigned long, vector bool long);
+     vector unsigned long vec_or (vector bool long, vector unsigned long);
+     vector double vec_perm (vector double, vector double, vector unsigned char);
+     vector long vec_perm (vector long, vector long, vector unsigned char);
+     vector unsigned long vec_perm (vector unsigned long, vector unsigned long,
+                                    vector unsigned char);
      vector double vec_rint (vector double);
      vector double vec_recip (vector double, vector double);
      vector double vec_rsqrt (vector double);
      vector double vec_rsqrte (vector double);
      vector double vec_sel (vector double, vector double, vector bool long);
      vector double vec_sel (vector double, vector double, vector unsigned long);
-     vector double vec_sub (vector double, vector double);
+     vector long vec_sel (vector long, vector long, vector long);
+     vector long vec_sel (vector long, vector long, vector unsigned long);
+     vector long vec_sel (vector long, vector long, vector bool long);
+     vector unsigned long vec_sel (vector unsigned long, vector unsigned long,
+                                   vector long);
+     vector unsigned long vec_sel (vector unsigned long, vector unsigned long,
+                                   vector unsigned long);
+     vector unsigned long vec_sel (vector unsigned long, vector unsigned long,
+                                   vector bool long);
+     vector double vec_splats (double);
+     vector signed long vec_splats (signed long);
+     vector unsigned long vec_splats (unsigned long);
      vector float vec_sqrt (vector float);
      vector double vec_sqrt (vector double);
      void vec_st (vector double, int, vector double *);
      void vec_st (vector double, int, double *);
+     vector double vec_sub (vector double, vector double);
      vector double vec_trunc (vector double);
      vector double vec_xor (vector double, vector double);
      vector double vec_xor (vector double, vector bool long);
      vector double vec_xor (vector bool long, vector double);
+     vector long vec_xor (vector long, vector long);
+     vector long vec_xor (vector long, vector bool long);
+     vector long vec_xor (vector bool long, vector long);
+     vector unsigned long vec_xor (vector unsigned long, vector unsigned long);
+     vector unsigned long vec_xor (vector unsigned long, vector bool long);
+     vector unsigned long vec_xor (vector bool long, vector unsigned long);
      int vec_all_eq (vector double, vector double);
      int vec_all_ge (vector double, vector double);
      int vec_all_gt (vector double, vector double);
@@ -40868,17 +40944,30 @@ VECTOR UNSIGNED LONG LONG.
                                         vector unsigned long long);
 
      int vec_all_eq (vector long long, vector long long);
+     int vec_all_eq (vector unsigned long long, vector unsigned long long);
      int vec_all_ge (vector long long, vector long long);
+     int vec_all_ge (vector unsigned long long, vector unsigned long long);
      int vec_all_gt (vector long long, vector long long);
+     int vec_all_gt (vector unsigned long long, vector unsigned long long);
      int vec_all_le (vector long long, vector long long);
+     int vec_all_le (vector unsigned long long, vector unsigned long long);
      int vec_all_lt (vector long long, vector long long);
+     int vec_all_lt (vector unsigned long long, vector unsigned long long);
      int vec_all_ne (vector long long, vector long long);
+     int vec_all_ne (vector unsigned long long, vector unsigned long long);
+
      int vec_any_eq (vector long long, vector long long);
+     int vec_any_eq (vector unsigned long long, vector unsigned long long);
      int vec_any_ge (vector long long, vector long long);
+     int vec_any_ge (vector unsigned long long, vector unsigned long long);
      int vec_any_gt (vector long long, vector long long);
+     int vec_any_gt (vector unsigned long long, vector unsigned long long);
      int vec_any_le (vector long long, vector long long);
+     int vec_any_le (vector unsigned long long, vector unsigned long long);
      int vec_any_lt (vector long long, vector long long);
+     int vec_any_lt (vector unsigned long long, vector unsigned long long);
      int vec_any_ne (vector long long, vector long long);
+     int vec_any_ne (vector unsigned long long, vector unsigned long long);
 
      vector long long vec_eqv (vector long long, vector long long);
      vector long long vec_eqv (vector bool long long, vector long long);
@@ -40915,6 +41004,14 @@ VECTOR UNSIGNED LONG LONG.
      vector long long vec_max (vector long long, vector long long);
      vector unsigned long long vec_max (vector unsigned long long,
                                         vector unsigned long long);
+
+     vector signed int vec_mergee (vector signed int, vector signed int);
+     vector unsigned int vec_mergee (vector unsigned int, vector unsigned int);
+     vector bool int vec_mergee (vector bool int, vector bool int);
+
+     vector signed int vec_mergeo (vector signed int, vector signed int);
+     vector unsigned int vec_mergeo (vector unsigned int, vector unsigned int);
+     vector bool int vec_mergeo (vector bool int, vector bool int);
 
      vector long long vec_min (vector long long, vector long long);
      vector unsigned long long vec_min (vector unsigned long long,
@@ -40994,6 +41091,8 @@ VECTOR UNSIGNED LONG LONG.
                                     vector unsigned long long);
 
      vector unsigned int vec_packsu (vector long long, vector long long);
+     vector unsigned int vec_packsu (vector unsigned long long,
+                                     vector unsigned long long);
 
      vector long long vec_rl (vector long long,
                               vector unsigned long long);
@@ -41034,6 +41133,15 @@ VECTOR UNSIGNED LONG LONG.
 
      vector long long vec_vbpermq (vector signed char, vector signed char);
      vector long long vec_vbpermq (vector unsigned char, vector unsigned char);
+
+     vector long long vec_cntlz (vector long long);
+     vector unsigned long long vec_cntlz (vector unsigned long long);
+     vector int vec_cntlz (vector int);
+     vector unsigned int vec_cntlz (vector int);
+     vector short vec_cntlz (vector short);
+     vector unsigned short vec_cntlz (vector unsigned short);
+     vector signed char vec_cntlz (vector signed char);
+     vector unsigned char vec_cntlz (vector unsigned char);
 
      vector long long vec_vclz (vector long long);
      vector unsigned long long vec_vclz (vector unsigned long long);
@@ -53799,108 +53907,108 @@ Node: Other MIPS Built-in Functions1578267
 Node: picoChip Built-in Functions1578791
 Node: PowerPC Built-in Functions1580139
 Node: PowerPC AltiVec/VSX Built-in Functions1583848
-Node: PowerPC Hardware Transactional Memory Built-in Functions1716746
-Node: RX Built-in Functions1723287
-Node: S/390 System z Built-in Functions1727320
-Node: SH Built-in Functions1732549
-Node: SPARC VIS Built-in Functions1733942
-Node: SPU Built-in Functions1739545
-Node: TI C6X Built-in Functions1741362
-Node: TILE-Gx Built-in Functions1742387
-Node: TILEPro Built-in Functions1743506
-Node: Target Format Checks1744575
-Node: Solaris Format Checks1745007
-Node: Darwin Format Checks1745433
-Node: Pragmas1746251
-Node: ARM Pragmas1746961
-Node: M32C Pragmas1747564
-Node: MeP Pragmas1748636
-Node: RS/6000 and PowerPC Pragmas1750704
-Node: Darwin Pragmas1751445
-Node: Solaris Pragmas1752512
-Node: Symbol-Renaming Pragmas1753676
-Node: Structure-Packing Pragmas1755232
-Node: Weak Pragmas1756877
-Node: Diagnostic Pragmas1757611
-Node: Visibility Pragmas1760720
-Node: Push/Pop Macro Pragmas1761472
-Node: Function Specific Option Pragmas1762445
-Node: Unnamed Fields1764705
-Node: Thread-Local1766932
-Node: C99 Thread-Local Edits1769037
-Node: C++98 Thread-Local Edits1771035
-Node: Binary constants1774480
-Node: C++ Extensions1775151
-Node: C++ Volatiles1776862
-Node: Restricted Pointers1779210
-Node: Vague Linkage1780801
-Node: C++ Interface1784424
-Ref: C++ Interface-Footnote-11788712
-Node: Template Instantiation1788850
-Node: Bound member functions1795436
-Node: C++ Attributes1796968
-Node: Function Multiversioning1799624
-Node: Namespace Association1801441
-Node: Type Traits1802821
-Node: Java Exceptions1809304
-Node: Deprecated Features1810694
-Node: Backwards Compatibility1813661
-Node: Objective-C1815008
-Node: GNU Objective-C runtime API1815615
-Node: Modern GNU Objective-C runtime API1816622
-Node: Traditional GNU Objective-C runtime API1819058
-Node: Executing code before main1819785
-Node: What you can and what you cannot do in +load1822525
-Node: Type encoding1824913
-Node: Legacy type encoding1829940
-Node: @encode1831030
-Node: Method signatures1831571
-Node: Garbage Collection1833563
-Node: Constant string objects1836253
-Node: compatibility_alias1838762
-Node: Exceptions1839483
-Node: Synchronization1842193
-Node: Fast enumeration1843377
-Node: Using fast enumeration1843689
-Node: c99-like fast enumeration syntax1844900
-Node: Fast enumeration details1845603
-Node: Fast enumeration protocol1847943
-Node: Messaging with the GNU Objective-C runtime1851095
-Node: Dynamically registering methods1852467
-Node: Forwarding hook1854158
-Node: Compatibility1857198
-Node: Gcov1863754
-Node: Gcov Intro1864287
-Node: Invoking Gcov1867005
-Node: Gcov and Optimization1879907
-Node: Gcov Data Files1882909
-Node: Cross-profiling1884304
-Node: Trouble1886158
-Node: Actual Bugs1887570
-Node: Interoperation1888017
-Node: Incompatibilities1894908
-Node: Fixed Headers1903060
-Node: Standard Libraries1904718
-Node: Disappointments1906090
-Node: C++ Misunderstandings1910449
-Node: Static Definitions1911260
-Node: Name lookup1912313
-Ref: Name lookup-Footnote-11917093
-Node: Temporaries1917282
-Node: Copy Assignment1919258
-Node: Non-bugs1921065
-Node: Warnings and Errors1931571
-Node: Bugs1933333
-Node: Bug Criteria1933897
-Node: Bug Reporting1936107
-Node: Service1936328
-Node: Contributing1937147
-Node: Funding1937887
-Node: GNU Project1940377
-Node: Copying1941023
-Node: GNU Free Documentation License1978532
-Node: Contributors2003650
-Node: Option Index2041048
-Node: Keyword Index2237329
+Node: PowerPC Hardware Transactional Memory Built-in Functions1723639
+Node: RX Built-in Functions1730180
+Node: S/390 System z Built-in Functions1734213
+Node: SH Built-in Functions1739442
+Node: SPARC VIS Built-in Functions1740835
+Node: SPU Built-in Functions1746438
+Node: TI C6X Built-in Functions1748255
+Node: TILE-Gx Built-in Functions1749280
+Node: TILEPro Built-in Functions1750399
+Node: Target Format Checks1751468
+Node: Solaris Format Checks1751900
+Node: Darwin Format Checks1752326
+Node: Pragmas1753144
+Node: ARM Pragmas1753854
+Node: M32C Pragmas1754457
+Node: MeP Pragmas1755529
+Node: RS/6000 and PowerPC Pragmas1757597
+Node: Darwin Pragmas1758338
+Node: Solaris Pragmas1759405
+Node: Symbol-Renaming Pragmas1760569
+Node: Structure-Packing Pragmas1762125
+Node: Weak Pragmas1763770
+Node: Diagnostic Pragmas1764504
+Node: Visibility Pragmas1767613
+Node: Push/Pop Macro Pragmas1768365
+Node: Function Specific Option Pragmas1769338
+Node: Unnamed Fields1771598
+Node: Thread-Local1773825
+Node: C99 Thread-Local Edits1775930
+Node: C++98 Thread-Local Edits1777928
+Node: Binary constants1781373
+Node: C++ Extensions1782044
+Node: C++ Volatiles1783755
+Node: Restricted Pointers1786103
+Node: Vague Linkage1787694
+Node: C++ Interface1791317
+Ref: C++ Interface-Footnote-11795605
+Node: Template Instantiation1795743
+Node: Bound member functions1802329
+Node: C++ Attributes1803861
+Node: Function Multiversioning1806517
+Node: Namespace Association1808334
+Node: Type Traits1809714
+Node: Java Exceptions1816197
+Node: Deprecated Features1817587
+Node: Backwards Compatibility1820554
+Node: Objective-C1821901
+Node: GNU Objective-C runtime API1822508
+Node: Modern GNU Objective-C runtime API1823515
+Node: Traditional GNU Objective-C runtime API1825951
+Node: Executing code before main1826678
+Node: What you can and what you cannot do in +load1829418
+Node: Type encoding1831806
+Node: Legacy type encoding1836833
+Node: @encode1837923
+Node: Method signatures1838464
+Node: Garbage Collection1840456
+Node: Constant string objects1843146
+Node: compatibility_alias1845655
+Node: Exceptions1846376
+Node: Synchronization1849086
+Node: Fast enumeration1850270
+Node: Using fast enumeration1850582
+Node: c99-like fast enumeration syntax1851793
+Node: Fast enumeration details1852496
+Node: Fast enumeration protocol1854836
+Node: Messaging with the GNU Objective-C runtime1857988
+Node: Dynamically registering methods1859360
+Node: Forwarding hook1861051
+Node: Compatibility1864091
+Node: Gcov1870647
+Node: Gcov Intro1871180
+Node: Invoking Gcov1873898
+Node: Gcov and Optimization1886800
+Node: Gcov Data Files1889802
+Node: Cross-profiling1891197
+Node: Trouble1893051
+Node: Actual Bugs1894463
+Node: Interoperation1894910
+Node: Incompatibilities1901801
+Node: Fixed Headers1909953
+Node: Standard Libraries1911611
+Node: Disappointments1912983
+Node: C++ Misunderstandings1917342
+Node: Static Definitions1918153
+Node: Name lookup1919206
+Ref: Name lookup-Footnote-11923986
+Node: Temporaries1924175
+Node: Copy Assignment1926151
+Node: Non-bugs1927958
+Node: Warnings and Errors1938464
+Node: Bugs1940226
+Node: Bug Criteria1940790
+Node: Bug Reporting1943000
+Node: Service1943221
+Node: Contributing1944040
+Node: Funding1944780
+Node: GNU Project1947270
+Node: Copying1947916
+Node: GNU Free Documentation License1985425
+Node: Contributors2010543
+Node: Option Index2047941
+Node: Keyword Index2244222
 
 End Tag Table
